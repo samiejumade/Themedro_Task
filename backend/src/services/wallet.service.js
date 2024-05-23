@@ -11,6 +11,7 @@ const testTokenList = require('../utils/polygon_testnet.json');
 const {BNB_ADDRESS, COIN_AMOUNT, ADMIN_GAS_LIMIT, ADMIN_GAS_PRICE} = require('../utils/constants');
 const emailService = require('./emailer.service');
 const i18n = require('i18n');
+const axios = require('axios');
 
 class WalletService {
     constructor() {
@@ -41,6 +42,25 @@ class WalletService {
 
         return {response:true, message:"success", data:{publicKey:wallet.publickey, privateKey: privateKey}}
     }
+
+    ////////// Changes by Samir Jumade
+    static async getBnbAndEthPrice() {
+              const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
+            params: {
+              ids: 'ethereum,binancecoin',
+              vs_currencies: 'usd'
+            }
+          });
+      
+          const data = response.data
+
+          const transformedData = {
+            BNB: data.binancecoin,
+            ETH: data.ethereum,
+          };
+        return {response:true, message:"Success!", data: transformedData}
+    }
+///////////////
 
     static async accessWalletWithPrivateKey(rawData, userId) {
         rawData.privateKey = new Wallet().decrypt(rawData.privateKey)      

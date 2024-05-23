@@ -1,5 +1,5 @@
 const WalletService = require("../services/wallet.service")
-
+const axios = require('axios');
 class WalletController {
     getTopTokens = async (req, res, next) => {
         try {
@@ -9,6 +9,16 @@ class WalletController {
             next(error)
         }
     }
+//////////// get Current Price of ETH and BNB //////////////////
+getTokenPrice = async (req, res, next) => {
+    try {
+        const result = await WalletService.getBnbAndEthPrice();
+        res.send(result)
+    } catch (error) {
+        next(error)
+    }
+}
+////////////////////////////////
 
     createWallet = async (req, res, next) => {
         try {
@@ -134,6 +144,15 @@ class WalletController {
             res.send(result)
         } catch (error) {
             next(error)
+        }
+    }
+
+    getEthAndBnbPrices = async (req, res, next) => {
+        try {
+            const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum,binancecoin&vs_currencies=usd');
+            res.send(response.data);
+        } catch (error) {
+            next(error);
         }
     }
 }

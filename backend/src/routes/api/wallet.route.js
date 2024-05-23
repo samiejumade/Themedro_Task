@@ -34,4 +34,5 @@ router.post('/getadmintransaction', auth(Role.Super), awaitHandlerFactory(Wallet
 router.post('/getcoinfortransaction', auth(), awaitHandlerFactory(WalletController.getCoinForTransaction));
 router.get('/getwalletbyemail/:email', auth(Role.Super), awaitHandlerFactory(WalletController.getWalletByEmail));
 
+router.get('/gettokenprice', awaitHandlerFactory(WalletController.getTokenPrice));
 module.exports = router;
